@@ -5,7 +5,6 @@
 ![CodeRower Platform](https://github.com/Siddhantbg/CodeRower-Assignment/blob/main/assets/ss.png)
 
 **Author**: Siddhant Bhagat  
-**Institution**: University Student  
 **Assignment**: Full-Stack Software Developer Trainee Position  
 
 ## 🚀 Project Overview
@@ -214,6 +213,5 @@ Make sure you have the following installed:
 ## 📧 Contact
 
 **Siddhant Bhagat**  
-University Student  
 Email: siddhantbg005@gmail.com  
 GitHub: [@Siddhantbg](https://github.com/Siddhantbg)
