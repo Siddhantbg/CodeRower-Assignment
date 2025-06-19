@@ -2,32 +2,40 @@
 
 import mongoose from 'mongoose';
 
+// Flexible schema that can work with company's existing data structure
 const configurationSchema = new mongoose.Schema({
+  // Multiple possible ID fields
+  configId: {
+    type: String,
+    sparse: true // Allow multiple docs without this field
+  },
   configurationId: {
     type: String,
-    required: true,
-    unique: true,
-    trim: true
+    sparse: true // Allow multiple docs without this field
   },
+  // Multiple possible data fields
   data: {
-    type: [[String]], // Array of Arrays of Strings (2D array)
-    default: [
-      ["sym1", "sym2", "sym3"],
-      ["sym4", "sym6", "sym8"], 
-      ["sym5", "sym1", "sym0"]
-    ]
+    type: mongoose.Schema.Types.Mixed, // Flexible type
+    default: undefined
   },
+  configuration: {
+    type: mongoose.Schema.Types.Mixed,
+    default: undefined
+  },
+  values: {
+    type: mongoose.Schema.Types.Mixed,
+    default: undefined
+  },
+  // Remark field
   remark: {
     type: String,
-    default: "",
-    trim: true
+    default: ""
   }
 }, {
-  timestamps: true // Automatically adds createdAt and updatedAt
+  timestamps: true,
+  strict: false, // Allow additional fields from company's DB
+  collection: 'configurations'
 });
-
-// Create index for better performance
-configurationSchema.index({ configurationId: 1 });
 
 const Configuration = mongoose.model('Configuration', configurationSchema);
 

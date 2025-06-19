@@ -86,17 +86,16 @@ export const updateConfiguration = async (configId, remark) => {
 };
 
 /**
- * Health check for backend connection - test with actual endpoint
+ * Health check for backend connection - use a simple ping approach
  * @returns {Promise<boolean>} Backend status
  */
 export const checkBackendHealth = async () => {
   try {
-    // Test with a simple request to your actual endpoint
-    // This will try to fetch a config and if it responds (even with 404), backend is running
-    await axios.get('http://localhost:8080/api/configurations/test', { timeout: 3000 });
+    // Use a simple base URL check instead of calling a specific endpoint
+    await axios.get('http://localhost:8080', { timeout: 3000 });
     return true;
   } catch (error) {
-    // If we get a proper HTTP response (even 404), backend is running
+    // Check if we get any HTTP response (even if it's an error)
     if (error.response && error.response.status) {
       console.log('✅ Backend is running (got HTTP response)');
       return true;
@@ -106,8 +105,8 @@ export const checkBackendHealth = async () => {
       console.warn('❌ Backend not running:', error.message);
       return false;
     }
-    // For other errors, assume backend is running but has issues
-    console.warn('⚠️ Backend health check unclear:', error.message);
+    // For other errors, assume backend is running
+    console.warn('⚠️ Backend health check unclear, assuming running:', error.message);
     return true;
   }
 };

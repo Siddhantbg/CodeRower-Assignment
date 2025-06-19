@@ -9,33 +9,52 @@ export const getConfiguration = async (req, res) => {
     
     console.log(`🔍 Fetching configuration for ID: ${id}`);
     
-    // Try to find existing configuration
-    let config = await Configuration.findOne({ configurationId: id });
+    // Try multiple field names to match company's existing structure
+    let config = await Configuration.findOne({
+      $or: [
+        { configId: id },
+        { configurationId: id },
+        { _id: id }
+      ]
+    });
+    
+    console.log(`📋 Found config:`, config ? 'YES' : 'NO');
+    if (config) {
+      console.log(`📋 Config structure:`, Object.keys(config.toObject()));
+    }
     
     if (!config) {
-      // If not found, create a default configuration with sample 2D array data
-      console.log(`📝 Creating new configuration for ID: ${id}`);
-      
-      const defaultData = [
+      console.log(`❌ No configuration found for ID: ${id}`);
+      return res.status(404).json({ 
+        message: `Configuration with ID '${id}' not found`,
+        suggestion: "Please check if this configuration ID exists in the database"
+      });
+    }
+    
+    // Check what data field exists
+    let dataToReturn = [];
+    
+    if (config.data && Array.isArray(config.data)) {
+      dataToReturn = config.data;
+      console.log(`📦 Using 'data' field:`, dataToReturn);
+    } else if (config.configuration && Array.isArray(config.configuration)) {
+      dataToReturn = config.configuration;
+      console.log(`📦 Using 'configuration' field:`, dataToReturn);
+    } else if (config.values && Array.isArray(config.values)) {
+      dataToReturn = config.values;
+      console.log(`📦 Using 'values' field:`, dataToReturn);
+    } else {
+      // If no array field found, create default structure
+      dataToReturn = [
         ["sym1", "sym2", "sym3"],
         ["sym4", "sym6", "sym8"], 
         ["sym5", "sym1", "sym0"]
       ];
-      
-      config = new Configuration({
-        configurationId: id,
-        data: defaultData,
-        remark: ""
-      });
-      
-      await config.save();
-      console.log(`✅ Created new configuration for ID: ${id}`);
+      console.log(`📦 Using default data structure`);
     }
     
-    console.log(`📦 Returning data:`, config.data);
-    
-    // Return the 2D array data as specified in the assignment
-    res.status(200).json(config.data);
+    console.log(`📦 Returning data:`, dataToReturn);
+    res.status(200).json(dataToReturn);
     
   } catch (error) {
     console.error(`❌ Error fetching configuration:`, error);
@@ -61,11 +80,19 @@ export const updateConfiguration = async (req, res) => {
       });
     }
     
-    // Try to find existing configuration
-    let config = await Configuration.findOne({ configurationId: id });
+    // Try to find existing configuration with multiple field possibilities
+    let config = await Configuration.findOne({
+      $or: [
+        { configId: id },
+        { configurationId: id },
+        { _id: id }
+      ]
+    });
+    
+    console.log(`📋 Found config for update:`, config ? 'YES' : 'NO');
     
     if (!config) {
-      // If not found, create a new one with default data
+      // If not found, create new with the most likely field name for company DB
       console.log(`📝 Creating new configuration for ID: ${id}`);
       
       const defaultData = [
@@ -74,22 +101,25 @@ export const updateConfiguration = async (req, res) => {
         ["sym5", "sym1", "sym0"]
       ];
       
-      config = new Configuration({
-        configurationId: id,
+      // Try the field name that's most likely to work
+      const newConfigData = {
+        configurationId: id, // Company probably uses this
         data: defaultData,
         remark: remark.trim()
-      });
+      };
+      
+      config = new Configuration(newConfigData);
     } else {
       // Update existing configuration
       config.remark = remark.trim();
-      config.updatedAt = new Date();
+      if (config.updatedAt !== undefined) {
+        config.updatedAt = new Date();
+      }
     }
     
     await config.save();
+    console.log(`✅ Successfully updated configuration`);
     
-    console.log(`✅ Updated configuration for ID: ${id}`);
-    
-    // Return success message as specified in assignment
     res.status(200).json({ message: "success" });
     
   } catch (error) {
