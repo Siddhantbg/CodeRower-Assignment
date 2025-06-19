@@ -6,7 +6,7 @@ dotenv.config();
 
 const verifyDatabaseData = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://development:X3TcC8tKnI5JINuR@betalive.9sakb.gcp.mongodb.net/database');
+    await mongoose.connect(process.env.MONGODB_URI);
     
     console.log('📄 Connected to MongoDB for verification\n');
     
