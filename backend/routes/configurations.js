@@ -1,4 +1,4 @@
-// backend/routes/configurations.js
+// routes/configurations.js
 import express from 'express';
 import { getConfiguration, updateConfiguration } from '../controllers/configurationController.js';
 

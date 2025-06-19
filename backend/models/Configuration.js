@@ -1,42 +1,27 @@
-// backend/models/Configuration.js
-
+// models/Configuration.js
 import mongoose from 'mongoose';
 
-// Flexible schema that can work with company's existing data structure
 const configurationSchema = new mongoose.Schema({
-  // Multiple possible ID fields
+  // Use configId as a custom string field instead of _id
   configId: {
     type: String,
-    sparse: true // Allow multiple docs without this field
+    required: true,
+    unique: true,
+    index: true
   },
-  configurationId: {
-    type: String,
-    sparse: true // Allow multiple docs without this field
-  },
-  // Multiple possible data fields
+  // The 2D array data as per assignment requirements  
   data: {
-    type: mongoose.Schema.Types.Mixed, // Flexible type
-    default: undefined
+    type: [[String]], // Array of arrays of strings
+    required: true
+    // No default values - data must come from database
   },
-  configuration: {
-    type: mongoose.Schema.Types.Mixed,
-    default: undefined
-  },
-  values: {
-    type: mongoose.Schema.Types.Mixed,
-    default: undefined
-  },
-  // Remark field
+  // Remark field for updates
   remark: {
     type: String,
-    default: ""
+    default: ''
   }
 }, {
-  timestamps: true,
-  strict: false, // Allow additional fields from company's DB
-  collection: 'configurations'
+  timestamps: true
 });
 
-const Configuration = mongoose.model('Configuration', configurationSchema);
-
-export default Configuration;
+export default mongoose.model('Configuration', configurationSchema);
