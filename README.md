@@ -1,6 +1,6 @@
 # CodeRower Assignment - Configuration Management Platform
 
-![CodeRower Platform](https://github.com/assets/ss)
+![CodeRower Platform](https://github.com/Siddhantbg/CodeRower-Assignment/blob/main/assets/ss.png)
 
 > A modern full-stack configuration management platform built as part of the CodeRower Software Pvt Ltd developer assessment.
 
