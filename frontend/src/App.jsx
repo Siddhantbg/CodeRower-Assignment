@@ -1,26 +1,71 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-import { Toaster } from 'react-hot-toast'
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+import Home from './pages/Home';
+import FetchConfig from './pages/FetchConfig';
+import UpdateRemark from './pages/UpdateRemark';
+import Loader from './components/Loader';
 
-// Import pages
-import FetchConfig from './pages/FetchConfig'
-import UpdateRemark from './pages/UpdateRemark'
+const App = () => {
+  const [isLoading, setIsLoading] = useState(true);
 
-// Import components
-import Layout from './components/Layout'
+  useEffect(() => {
+    // Show loader for first time visitors or every time
+    // You can change this logic as needed
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 3000); // Show loader for 3 seconds
 
-function App() {
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleLoaderComplete = () => {
+    setIsLoading(false);
+  };
+
+  if (isLoading) {
+    return <Loader onComplete={handleLoaderComplete} />;
+  }
+
   return (
-    <Router>
-      <Toaster position="top-right" />
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<FetchConfig />} />
-          <Route path="update" element={<UpdateRemark />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Route>
-      </Routes>
-    </Router>
-  )
-}
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/fetch-config" element={<FetchConfig />} />
+          <Route path="/update-remark" element={<UpdateRemark />} />
+        </Routes>
+      </BrowserRouter>
+      
+      {/* Toast Notifications */}
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: '#fff',
+            color: '#374151',
+            border: '1px solid #E5E7EB',
+            borderRadius: '12px',
+            fontSize: '14px',
+            fontWeight: '500',
+          },
+          success: {
+            iconTheme: {
+              primary: '#8B5CF6',
+              secondary: '#fff',
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: '#EF4444',
+              secondary: '#fff',
+            },
+          },
+        }}
+      />
+    </>
+  );
+};
 
-export default App
+export default App;

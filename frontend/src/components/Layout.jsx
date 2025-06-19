@@ -1,23 +1,37 @@
-import { Outlet } from 'react-router-dom';
+import React from 'react';
 import Navigation from './Navigation';
 
-const Layout = () => {
+const Layout = ({ children }) => {
   return (
-    <div className="min-h-screen flex flex-col bg-light">
-      <header className="bg-gradient-main shadow-md">
-        <div className="container mx-auto px-4 py-4">
-          <h1 className="text-2xl font-bold text-white">CodeRower Assignment</h1>
-          <Navigation />
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-violet-50">
+      <Navigation />
+      
+      <main className="relative">
+        {/* Background decoration */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-40 -right-32 w-96 h-96 bg-gradient-to-br from-violet-200/30 to-pink-200/30 rounded-full blur-3xl"></div>
+          <div className="absolute top-96 -left-32 w-80 h-80 bg-gradient-to-br from-indigo-200/30 to-violet-200/30 rounded-full blur-3xl"></div>
         </div>
-      </header>
-      
-      <main className="flex-grow container mx-auto px-4 py-8">
-        <Outlet />
+        
+        <div className="relative z-10">
+          {children}
+        </div>
       </main>
-      
-      <footer className="bg-gradient-dark text-white py-4">
-        <div className="container mx-auto px-4 text-center">
-          <p>© {new Date().getFullYear()} CodeRower Assignment - Sprint 2</p>
+
+      {/* Footer */}
+      <footer className="relative z-10 mt-20 border-t border-gray-200 bg-white/50 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <p className="text-gray-600">
+              Built with ❤️ by{' '}
+              <span className="gradient-purple bg-clip-text text-transparent font-semibold">
+                CodeRower
+              </span>
+            </p>
+            <p className="text-sm text-gray-500 mt-2">
+              Secure Configuration Management Platform
+            </p>
+          </div>
         </div>
       </footer>
     </div>
