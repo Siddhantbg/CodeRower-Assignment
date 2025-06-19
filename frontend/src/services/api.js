@@ -1,8 +1,13 @@
 import axios from 'axios';
 
+// Environment-based API URL configuration
+const API_BASE_URL = import.meta.env.PROD 
+  ? import.meta.env.VITE_API_URL || 'process.env.VITE_API_URL'
+  : 'http://localhost:8080/api';
+
 // Create axios instance with base configuration
 const api = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL: API_BASE_URL,
   timeout: 10000, // 10 seconds timeout
   headers: {
     'Content-Type': 'application/json',
@@ -25,7 +30,25 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
-    return Promise.reject(error);
+    // Handle different error types
+    if (error.code === 'ECONNREFUSED') {
+      throw new Error('Backend server is not running. Please start your backend server.');
+    }
+    
+    if (error.response?.status === 404) {
+      throw new Error('Configuration not found. Please check the configuration ID.');
+    }
+    
+    if (error.response?.status === 500) {
+      throw new Error('Server error. Please try again later.');
+    }
+    
+    if (error.response?.status === 400) {
+      throw new Error(error.response.data?.message || 'Invalid request. Please check your input.');
+    }
+    
+    // Default error message
+    throw new Error(error.response?.data?.message || 'Network error. Please check your connection.');
   }
 );
 
@@ -54,10 +77,24 @@ export const updateConfiguration = async (id, remark) => {
 // Check if backend is healthy
 export const checkBackendHealth = async () => {
   try {
-    const response = await api.get('/', { timeout: 2000 });
+    // Get base URL without /api for health check
+    const baseURL = import.meta.env.PROD 
+      ? import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://your-backend-url.onrender.com'
+      : 'http://localhost:8080';
+      
+    await axios.get(baseURL, { timeout: 3000 });
     return true;
   } catch (error) {
-    return false;
+    // If we get any HTTP response (even if it's an error), backend is running
+    if (error.response && error.response.status) {
+      return true;
+    }
+    // If we get network error, backend is not running
+    if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND') {
+      return false;
+    }
+    // For other errors, assume backend is running
+    return true;
   }
 };
 
