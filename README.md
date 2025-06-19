@@ -1,11 +1,10 @@
 # CodeRower Assignment - Configuration Management Platform
 
-![CodeRower Platform](https://github.com/assets/ss)
-
 > A modern full-stack configuration management platform built as part of the CodeRower Software Pvt Ltd developer assessment.
 
+![CodeRower Platform](https://github.com/Siddhantbg/CodeRower-Assignment/blob/main/assets/ss.png)
+
 **Author**: Siddhant Bhagat  
-**Institution**: University Student  
 **Assignment**: Full-Stack Software Developer Trainee Position  
 
 ## 🚀 Project Overview
@@ -214,6 +213,5 @@ Make sure you have the following installed:
 ## 📧 Contact
 
 **Siddhant Bhagat**  
-University Student  
-Email: [Your Email]  
-GitHub: [@Siddhantbg](https://github.com/Siddhantbg
+Email: siddhantbg005@gmail.com  
+GitHub: [@Siddhantbg](https://github.com/Siddhantbg)
