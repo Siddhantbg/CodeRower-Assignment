@@ -25,7 +25,7 @@ const Layout = ({ children }) => {
             <p className="text-gray-600">
               Built with ❤️ by{' '}
               <span className="gradient-purple bg-clip-text text-transparent font-semibold">
-                CodeRower
+                Siddhant Bhagat
               </span>
             </p>
             <p className="text-sm text-gray-500 mt-2">
