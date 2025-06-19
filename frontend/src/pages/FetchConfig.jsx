@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Loader2, Database } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Layout from '../components/Layout';
+import { usePageAnimation, useButtonHover, useInputFocus, useResultsAnimation } from '../hooks/useGSAP';
 
-// Mock data for testing
 const mockConfigData = [
   ["sym1", "sym2", "sym3"],
   ["sym4", "sym6", "sym8"], 
@@ -15,6 +15,11 @@ const FetchConfig = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [configData, setConfigData] = useState(null);
   const [errors, setErrors] = useState({});
+
+  const pageRef = usePageAnimation();
+  const { buttonRef, handleMouseEnter, handleMouseLeave } = useButtonHover();
+  const { handleFocus, handleBlur } = useInputFocus();
+  const { resultsRef, animateResults } = useResultsAnimation();
 
   const validateForm = () => {
     const newErrors = {};
@@ -43,6 +48,11 @@ const FetchConfig = () => {
       
       setConfigData(mockConfigData);
       toast.success(`Successfully retrieved configuration for ID: ${configId}`);
+      
+      // Trigger results animation after state update
+      setTimeout(() => {
+        animateResults();
+      }, 100);
     } catch (error) {
       toast.error('Failed to fetch configuration. Please try again.');
     } finally {
@@ -58,7 +68,7 @@ const FetchConfig = () => {
 
   return (
     <Layout>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div ref={pageRef} className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 opacity-0">
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center mb-4">
@@ -86,6 +96,8 @@ const FetchConfig = () => {
                   id="configId"
                   value={configId}
                   onChange={(e) => setConfigId(e.target.value)}
+                  onFocus={handleFocus}
+                  onBlur={handleBlur}
                   className={`w-full px-4 py-3 border-2 rounded-xl bg-white/50 backdrop-blur-sm transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-violet-500/20 ${
                     errors.configId 
                       ? 'border-red-300 focus:border-red-500' 
@@ -103,9 +115,12 @@ const FetchConfig = () => {
 
             <div className="flex flex-col sm:flex-row gap-4">
               <button
+                ref={buttonRef}
                 type="submit"
                 disabled={isLoading}
-                className="flex-1 bg-gradient-to-r from-violet-500 to-indigo-500 hover:from-violet-600 hover:to-indigo-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 px-6 py-3 rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                className="flex-1 bg-gradient-to-r from-violet-500 to-indigo-500 hover:from-violet-600 hover:to-indigo-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 px-6 py-3 rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoading ? (
                   <div className="flex items-center justify-center">
@@ -135,7 +150,7 @@ const FetchConfig = () => {
 
         {/* Results Card */}
         {configData && (
-          <div className="bg-white/80 backdrop-blur-sm border border-white/20 shadow-xl rounded-2xl p-8 opacity-100 transform translate-y-0">
+          <div ref={resultsRef} className="bg-white/80 backdrop-blur-sm border border-white/20 shadow-xl rounded-2xl p-8 opacity-0">
             <div className="flex items-center mb-6">
               <Database className="h-6 w-6 text-violet-600 mr-3" />
               <h2 className="text-2xl font-bold text-gray-800">Configuration Data</h2>
@@ -147,7 +162,7 @@ const FetchConfig = () => {
             <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
               <div className="grid gap-4">
                 {configData.map((row, rowIndex) => (
-                  <div key={rowIndex} className="flex flex-wrap gap-2">
+                  <div key={rowIndex} className="result-row flex flex-wrap gap-2 opacity-0">
                     <span className="text-sm font-medium text-gray-500 min-w-16">
                       Row {rowIndex + 1}:
                     </span>
