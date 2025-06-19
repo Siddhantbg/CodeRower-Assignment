@@ -215,5 +215,5 @@ Make sure you have the following installed:
 
 **Siddhant Bhagat**  
 University Student  
-Email: [Your Email]  
-GitHub: [@Siddhantbg](https://github.com/Siddhantbg
+Email: siddhantbg005@gmail.com  
+GitHub: [@Siddhantbg](https://github.com/Siddhantbg)
