@@ -1,41 +1,115 @@
 import axios from 'axios';
 
-// Create axios instance with base URL
+// Create axios instance with base configuration
 const api = axios.create({
   baseURL: 'http://localhost:8080/api',
+  timeout: 10000, // 10 seconds timeout
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Add response interceptor for error handling
-api.interceptors.response.use(
-  (response) => response,
+// Request interceptor for logging
+api.interceptors.request.use(
+  (config) => {
+    console.log(`🚀 API Request: ${config.method?.toUpperCase()} ${config.url}`);
+    return config;
+  },
   (error) => {
-    const message = 
-      error.response?.data?.message ||
-      error.message ||
-      'An unexpected error occurred';
-    
-    return Promise.reject({ message });
+    console.error('❌ API Request Error:', error);
+    return Promise.reject(error);
   }
 );
 
-// API functions
-export const fetchConfiguration = async (id) => {
+// Response interceptor for error handling
+api.interceptors.response.use(
+  (response) => {
+    console.log(`✅ API Response: ${response.status} ${response.config.url}`);
+    return response;
+  },
+  (error) => {
+    console.error('❌ API Response Error:', error.response?.data || error.message);
+    
+    // Handle different error types
+    if (error.code === 'ECONNREFUSED') {
+      throw new Error('Backend server is not running. Please start your backend server on port 8080.');
+    }
+    
+    if (error.response?.status === 404) {
+      throw new Error('Configuration not found. Please check the configuration ID.');
+    }
+    
+    if (error.response?.status === 500) {
+      throw new Error('Server error. Please try again later.');
+    }
+    
+    if (error.response?.status === 400) {
+      throw new Error(error.response.data?.message || 'Invalid request. Please check your input.');
+    }
+    
+    // Default error message
+    throw new Error(error.response?.data?.message || 'Network error. Please check your connection.');
+  }
+);
+
+// API Functions
+
+/**
+ * Fetch configuration data by ID
+ * @param {string} configId - Configuration ID
+ * @returns {Promise<Array>} 2D array of configuration data
+ */
+export const fetchConfiguration = async (configId) => {
   try {
-    const response = await api.get(`/configurations/${id}`);
-    return { data: response.data, error: null };
+    const response = await api.get(`/configurations/${configId}`);
+    return response.data;
   } catch (error) {
-    return { data: null, error: error.message };
+    throw error;
   }
 };
 
-export const updateConfiguration = async (id, remark) => {
+/**
+ * Update configuration remark
+ * @param {string} configId - Configuration ID
+ * @param {string} remark - Remark text
+ * @returns {Promise<Object>} Success message
+ */
+export const updateConfiguration = async (configId, remark) => {
   try {
-    const response = await api.put(`/configurations/${id}`, { remark });
-    return { data: response.data, error: null };
+    const response = await api.put(`/configurations/${configId}`, {
+      remark: remark.trim()
+    });
+    return response.data;
   } catch (error) {
-    return { data: null, error: error.message };
+    throw error;
   }
 };
+
+/**
+ * Health check for backend connection - test with actual endpoint
+ * @returns {Promise<boolean>} Backend status
+ */
+export const checkBackendHealth = async () => {
+  try {
+    // Test with a simple request to your actual endpoint
+    // This will try to fetch a config and if it responds (even with 404), backend is running
+    await axios.get('http://localhost:8080/api/configurations/test', { timeout: 3000 });
+    return true;
+  } catch (error) {
+    // If we get a proper HTTP response (even 404), backend is running
+    if (error.response && error.response.status) {
+      console.log('✅ Backend is running (got HTTP response)');
+      return true;
+    }
+    // If we get network error, backend is not running
+    if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND') {
+      console.warn('❌ Backend not running:', error.message);
+      return false;
+    }
+    // For other errors, assume backend is running but has issues
+    console.warn('⚠️ Backend health check unclear:', error.message);
+    return true;
+  }
+};
+
+export default api;
