@@ -31,7 +31,6 @@ const Home = () => {
   return (
     <Layout>
       <div ref={pageRef} className="relative opacity-0">
-        {/* Hero Section */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
           <div className="text-center">
             <div className="flex items-center justify-center mb-8 hero-icon">
@@ -54,7 +53,6 @@ const Home = () => {
               Secure, fast, and reliable infrastructure for your critical applications.
             </p>
 
-            {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16 hero-buttons">
               <Link
                 ref={primaryBtnRef}
@@ -82,7 +80,6 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Features Section */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="text-center mb-16 features-header">
             <h2 className="text-4xl font-bold text-gray-800 mb-4">
@@ -109,7 +106,6 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Stats Section */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="bg-white/80 backdrop-blur-sm border border-white/20 shadow-xl rounded-2xl p-12 stats-section">
             <div className="grid md:grid-cols-3 gap-8 text-center">

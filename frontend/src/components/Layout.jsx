@@ -7,7 +7,7 @@ const Layout = ({ children }) => {
       <Navigation />
       
       <main className="relative">
-        {/* Background decoration */}
+
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute -top-40 -right-32 w-96 h-96 bg-gradient-to-br from-violet-200/30 to-pink-200/30 rounded-full blur-3xl"></div>
           <div className="absolute top-96 -left-32 w-80 h-80 bg-gradient-to-br from-indigo-200/30 to-violet-200/30 rounded-full blur-3xl"></div>
@@ -18,7 +18,6 @@ const Layout = ({ children }) => {
         </div>
       </main>
 
-      {/* Footer */}
       <footer className="relative z-10 mt-20 border-t border-gray-200 bg-white/50 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
           <div className="text-center">

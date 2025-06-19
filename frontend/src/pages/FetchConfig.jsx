@@ -18,7 +18,6 @@ const FetchConfig = () => {
   const { handleFocus, handleBlur } = useInputFocus();
   const { resultsRef, animateResults } = useResultsAnimation();
 
-  // Check backend health on component mount
   useEffect(() => {
     const checkHealth = async () => {
       const isHealthy = await checkBackendHealth();
@@ -43,7 +42,6 @@ const FetchConfig = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -64,14 +62,12 @@ const FetchConfig = () => {
     try {
       const data = await fetchConfiguration(configId.trim());
       
-      // Check if data is an empty array
       if (Array.isArray(data) && data.length === 0) {
         setIsEmpty(true);
         toast.error(`No configuration found for ID: ${configId}. This ID doesn't exist in the database.`);
         return;
       }
       
-      // Check if data is valid
       if (Array.isArray(data) && data.length > 0) {
         setConfigData(data);
         toast.success(`Successfully retrieved configuration for ID: ${configId}`);
@@ -80,7 +76,6 @@ const FetchConfig = () => {
           animateResults();
         }, 100);
       }
-      // Handle object response with data property
       else if (data && typeof data === 'object' && data.data && Array.isArray(data.data)) {
         if (data.data.length === 0) {
           setIsEmpty(true);
@@ -162,7 +157,6 @@ const FetchConfig = () => {
           </div>
         </div>
 
-        {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center mb-4">
             <Search className="h-12 w-12 text-violet-600 mr-3" />
@@ -176,7 +170,6 @@ const FetchConfig = () => {
           </p>
         </div>
 
-        {/* Form Card */}
         <div className="bg-white/80 backdrop-blur-sm border border-white/20 shadow-xl rounded-2xl p-8 mb-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
@@ -245,7 +238,6 @@ const FetchConfig = () => {
           </form>
         </div>
 
-        {/* Empty Result Message */}
         {isEmpty && (
           <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-6 mb-8">
             <div className="flex items-center mb-3">
@@ -264,7 +256,6 @@ const FetchConfig = () => {
           </div>
         )}
 
-        {/* Results Card */}
         {configData && configData.length > 0 && (
           <div ref={resultsRef} className="bg-white/80 backdrop-blur-sm border border-white/20 shadow-xl rounded-2xl p-8 opacity-0">
             <div className="flex items-center mb-6">

@@ -17,7 +17,6 @@ const UpdateRemark = () => {
   const { buttonRef, handleMouseEnter, handleMouseLeave } = useButtonHover();
   const { handleFocus, handleBlur } = useInputFocus();
 
-  // Check backend health on component mount
   useEffect(() => {
     const checkHealth = async () => {
       const isHealthy = await checkBackendHealth();
@@ -68,18 +67,15 @@ const UpdateRemark = () => {
     try {
       const response = await updateConfiguration(configId.trim(), remark.trim());
       
-      // Check if response indicates success
       if (response && (response.message === 'success' || response.success)) {
         toast.success(`Configuration ${configId} has been updated successfully!`);
         
-        // Store success info
         setLastSuccess({
           configId: configId.trim(),
           remark: remark.trim(),
           timestamp: new Date().toLocaleString()
         });
         
-        // Reset form after successful submission
         setConfigId('');
         setRemark('');
         setErrors({});
@@ -115,7 +111,7 @@ const UpdateRemark = () => {
   return (
     <Layout>
       <div ref={pageRef} className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 opacity-0">
-        {/* Backend Status Indicator */}
+       
         <div className="mb-6">
           <div className={`flex items-center justify-center p-3 rounded-xl ${
             backendStatus === true 
@@ -149,7 +145,7 @@ const UpdateRemark = () => {
           </div>
         </div>
 
-        {/* Header */}
+       
         <div className="text-center mb-12">
           <div className="flex items-center justify-center mb-4">
             <Edit3 className="h-12 w-12 text-violet-600 mr-3" />
@@ -163,7 +159,7 @@ const UpdateRemark = () => {
           </p>
         </div>
 
-        {/* Success Message */}
+        
         {lastSuccess && (
           <div className="mb-8 bg-green-50 border border-green-200 rounded-xl p-6">
             <div className="flex items-center mb-3">
@@ -178,10 +174,10 @@ const UpdateRemark = () => {
           </div>
         )}
 
-        {/* Form Card */}
+        
         <div className="bg-white/80 backdrop-blur-sm border border-white/20 shadow-xl rounded-2xl p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Configuration ID Field */}
+            
             <div>
               <label htmlFor="configId" className="block text-sm font-semibold text-gray-700 mb-2">
                 Configuration ID <span className="text-red-500">*</span>
@@ -212,7 +208,6 @@ const UpdateRemark = () => {
               )}
             </div>
 
-            {/* Remark Field */}
             <div>
               <label htmlFor="remark" className="block text-sm font-semibold text-gray-700 mb-2">
                 Remark <span className="text-red-500">*</span>
@@ -235,7 +230,8 @@ const UpdateRemark = () => {
 Example:
 - Updated configuration parameters for production environment
 - Fixed issue with authentication settings
-- Added new security protocols"
+- Added new security protocols
+- Hire Siddhant"
                   disabled={isLoading}
                 />
                 <MessageSquare className="absolute right-3 top-3 h-5 w-5 text-gray-400" />
@@ -257,7 +253,6 @@ Example:
               </div>
             </div>
 
-            {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <button
                 ref={buttonRef}
@@ -291,7 +286,6 @@ Example:
             </div>
           </form>
 
-          {/* Form Guidelines */}
           <div className="mt-8 p-4 bg-violet-50 rounded-xl border border-violet-100">
             <h3 className="font-semibold text-violet-800 mb-2 flex items-center">
               <MessageSquare className="h-4 w-4 mr-2" />

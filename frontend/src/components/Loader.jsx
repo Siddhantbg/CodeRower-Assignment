@@ -6,7 +6,6 @@ const Loader = ({ onComplete }) => {
   const [loadingText, setLoadingText] = useState('Initializing secure configuration infrastructure');
 
   useEffect(() => {
-    // Progress animation
     const progressInterval = setInterval(() => {
       setProgress(prev => {
         if (prev >= 100) {
@@ -21,7 +20,6 @@ const Loader = ({ onComplete }) => {
       });
     }, 50);
 
-    // Loading text animation
     const textInterval = setInterval(() => {
       setLoadingText(prev => {
         if (prev.endsWith('...')) {
@@ -40,7 +38,7 @@ const Loader = ({ onComplete }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center gradient-purple-dark">
       <div className="text-center">
-        {/* Logo/Icon */}
+        
         <div className="flex items-center justify-center mb-8">
           <div className="relative">
             <Settings 
@@ -51,7 +49,7 @@ const Loader = ({ onComplete }) => {
           </div>
         </div>
 
-        {/* Brand Name */}
+        
         <h1 className="text-4xl font-bold text-white mb-2">
           CodeRower
         </h1>
@@ -59,7 +57,7 @@ const Loader = ({ onComplete }) => {
           Configuration Management Platform
         </p>
 
-        {/* Progress Bar */}
+        
         <div className="w-80 bg-white/20 rounded-full h-2 mb-6 mx-auto overflow-hidden">
           <div 
             className="h-full bg-white rounded-full transition-all duration-100 ease-out"
@@ -67,12 +65,12 @@ const Loader = ({ onComplete }) => {
           ></div>
         </div>
 
-        {/* Progress Percentage */}
+        
         <div className="text-white text-xl font-semibold mb-4">
           {progress}%
         </div>
 
-        {/* Loading Text */}
+       
         <p className="text-violet-200 text-sm max-w-md mx-auto">
           {loadingText}
         </p>

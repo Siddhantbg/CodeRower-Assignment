@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 
-// Page entrance animation
 export const usePageAnimation = () => {
   const pageRef = useRef();
 
@@ -17,7 +16,6 @@ export const usePageAnimation = () => {
   return pageRef;
 };
 
-// Stagger animation for multiple elements
 export const useStaggerAnimation = (selector, delay = 0) => {
   const containerRef = useRef();
 
@@ -40,7 +38,6 @@ export const useStaggerAnimation = (selector, delay = 0) => {
   return containerRef;
 };
 
-// Button hover animations
 export const useButtonHover = () => {
   const buttonRef = useRef();
 
@@ -67,7 +64,6 @@ export const useButtonHover = () => {
   return { buttonRef, handleMouseEnter, handleMouseLeave };
 };
 
-// Input focus animations
 export const useInputFocus = () => {
   const handleFocus = (e) => {
     gsap.to(e.target, { 
@@ -88,7 +84,6 @@ export const useInputFocus = () => {
   return { handleFocus, handleBlur };
 };
 
-// Results reveal animation
 export const useResultsAnimation = () => {
   const resultsRef = useRef();
 
@@ -104,7 +99,6 @@ export const useResultsAnimation = () => {
         }
       );
 
-      // Animate individual result rows
       setTimeout(() => {
         gsap.fromTo(resultsRef.current.querySelectorAll('.result-row'),
           { opacity: 0, x: -20 },

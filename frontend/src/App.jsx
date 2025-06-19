@@ -10,11 +10,10 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Show loader for first time visitors or every time
-    // You can change this logic as needed
+   
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 3000); // Show loader for 3 seconds
+    }, 3000); 
 
     return () => clearTimeout(timer);
   }, []);
@@ -37,7 +36,6 @@ const App = () => {
         </Routes>
       </BrowserRouter>
       
-      {/* Toast Notifications */}
       <Toaster
         position="top-right"
         toastOptions={{
