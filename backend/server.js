@@ -42,7 +42,6 @@ app.use('/api/configurations', configurationRoutes);
 
 // Global error handler
 app.use((err, req, res, next) => {
-  console.error('🚨 Global error:', err);
   res.status(500).json({
     message: 'Internal server error',
     error: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong'
@@ -62,7 +61,5 @@ app.use('*', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server is running on port ${PORT}`);
-  console.log(`📡 API base URL: http://localhost:${PORT}`);
-  console.log(`🔍 Health check: http://localhost:${PORT}/`);
+  console.log(`Server is running on port ${PORT}`);
 });

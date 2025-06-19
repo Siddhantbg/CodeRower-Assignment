@@ -66,12 +66,7 @@ const UpdateRemark = () => {
     setIsLoading(true);
     
     try {
-      console.log(`📝 Updating remark for configuration ID: ${configId}`);
-      console.log(`💬 Remark: ${remark}`);
-      
       const response = await updateConfiguration(configId.trim(), remark.trim());
-      
-      console.log('✅ Update response:', response);
       
       // Check if response indicates success
       if (response && (response.message === 'success' || response.success)) {
@@ -93,7 +88,6 @@ const UpdateRemark = () => {
       }
       
     } catch (error) {
-      console.error('❌ Update error:', error);
       toast.error(error.message || 'Failed to update remark');
     } finally {
       setIsLoading(false);

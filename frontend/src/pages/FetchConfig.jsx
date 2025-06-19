@@ -43,6 +43,7 @@ const FetchConfig = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -61,11 +62,7 @@ const FetchConfig = () => {
     setIsEmpty(false);
     
     try {
-      console.log(`🔍 Fetching configuration for ID: ${configId}`);
-      
       const data = await fetchConfiguration(configId.trim());
-      
-      console.log('📦 Received data:', data);
       
       // Check if data is an empty array
       if (Array.isArray(data) && data.length === 0) {
@@ -102,7 +99,6 @@ const FetchConfig = () => {
       }
       
     } catch (error) {
-      console.error('❌ Fetch error:', error);
       toast.error(error.message || 'Failed to fetch configuration');
       setConfigData(null);
       setIsEmpty(false);
