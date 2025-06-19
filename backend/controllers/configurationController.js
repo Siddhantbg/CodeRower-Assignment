@@ -1,4 +1,3 @@
-// controllers/configurationController.js
 import Configuration from '../models/Configuration.js';
 
 // GET /api/configurations/:id
@@ -6,7 +5,6 @@ export const getConfiguration = async (req, res) => {
   try {
     const { id } = req.params;
     
-    // Find by configId instead of _id to avoid ObjectId casting error
     const configuration = await Configuration.findOne({ configId: id });
     
     if (!configuration) {
@@ -16,7 +14,6 @@ export const getConfiguration = async (req, res) => {
       });
     }
     
-    // Return the 2D array as per assignment requirements
     res.json(configuration.data);
     
   } catch (error) {
@@ -41,7 +38,6 @@ export const updateConfiguration = async (req, res) => {
       });
     }
     
-    // Find and update by configId instead of _id to avoid ObjectId casting error
     const configuration = await Configuration.findOneAndUpdate(
       { configId: id },
       { remark: remark },
@@ -55,7 +51,6 @@ export const updateConfiguration = async (req, res) => {
       });
     }
     
-    // Return success message as per assignment requirements
     res.json({ message: 'success' });
     
   } catch (error) {

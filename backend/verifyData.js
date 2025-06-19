@@ -1,4 +1,3 @@
-// backend/verifyData.js
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
@@ -8,18 +7,17 @@ const verifyDatabaseData = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URI);
     
-    console.log('📄 Connected to MongoDB for verification\n');
+    console.log(' Connected to MongoDB for verification\n');
     
-    // Get raw data directly from MongoDB collection
     const rawCollection = mongoose.connection.db.collection('configurations');
     
-    console.log('🔍 Raw MongoDB Documents:');
+    console.log(' Raw MongoDB Documents:');
     console.log('=====================================');
     
     const allDocs = await rawCollection.find({}).toArray();
     
     allDocs.forEach((doc, index) => {
-      console.log(`\n📄 Document ${index + 1}:`);
+      console.log(`\n Document ${index + 1}:`);
       console.log(`   _id: ${doc._id}`);
       console.log(`   configId: ${doc.configId}`);
       console.log(`   data: ${JSON.stringify(doc.data)}`);
@@ -28,7 +26,7 @@ const verifyDatabaseData = async () => {
       console.log(`   updatedAt: ${doc.updatedAt}`);
     });
     
-    console.log('\n🔍 Specifically checking "qwertyuiop":');
+    console.log('\n Specifically checking "qwertyuiop":');
     console.log('=====================================');
     
     const qwertyDoc = await rawCollection.findOne({ configId: 'qwertyuiop' });
@@ -38,23 +36,21 @@ const verifyDatabaseData = async () => {
       console.log(`   Data: ${JSON.stringify(qwertyDoc.data)}`);
       console.log(`   Last updated: ${qwertyDoc.updatedAt}`);
       
-      // Show this is definitely NOT default data by checking timestamps
       console.log('\n🕐 Timestamp Analysis:');
       console.log(`   Created: ${qwertyDoc.createdAt}`);
       console.log(`   Updated: ${qwertyDoc.updatedAt}`);
       
       if (qwertyDoc.updatedAt > qwertyDoc.createdAt) {
-        console.log('✅ PROOF: Document has been updated after creation!');
+        console.log(' PROOF: Document has been updated after creation!');
         console.log('   This proves data is coming from MongoDB, not defaults.');
       }
     } else {
-      console.log('❌ Document not found in database');
+      console.log(' Document not found in database');
     }
     
-    console.log('\n🧪 Let\'s modify the data to prove it\'s live:');
+    console.log('\n Let\'s modify the data to prove it\'s live:');
     console.log('=====================================');
     
-    // Update the data to something completely different
     const testData = [
       ['LIVE', 'DATA', 'TEST'],
       ['FROM', 'MONGO', 'DB'],
@@ -72,17 +68,17 @@ const verifyDatabaseData = async () => {
       }
     );
     
-    console.log('✅ Updated qwertyuiop with test data');
-    console.log('📝 New data:', JSON.stringify(testData));
-    console.log('\n🚀 Now test your API:');
+    console.log(' Updated qwertyuiop with test data');
+    console.log(' New data:', JSON.stringify(testData));
+    console.log('\n Now test your API:');
     console.log('   GET http://localhost:8080/api/configurations/qwertyuiop');
     console.log('   You should see the LIVE DATA TEST instead of sym1,sym2,sym3');
     
     await mongoose.connection.close();
-    console.log('\n🔌 Database connection closed');
+    console.log('\n Database connection closed');
     
   } catch (error) {
-    console.error('❌ Error:', error);
+    console.error(' Error:', error);
   }
 };
 
